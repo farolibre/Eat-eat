@@ -1,0 +1,388 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+<link rel="manifest" href="/static/manifest.json">
+<meta name="theme-color" content="#2c3e50">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="/static/icon-512.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eat-eat 🍎</title>
+    <style>
+        :root { --verde: #2c974b; --amarillo: #fff3cd; --gris-claro: #f0f0f0; --borde: #ccc; }
+        body { font-family: system-ui, -apple-system, sans-serif; max-width: 700px; margin: auto; padding: 20px; background: var(--gris-claro); color: #333; }
+        button { background: var(--verde); color: white; border: none; padding: 10px 18px; margin: 5px; cursor: pointer; border-radius: 6px; font-weight: 500; transition: opacity 0.2s; }
+        button:hover:not(:disabled) { opacity: 0.9; }
+        button:disabled { background: #888; cursor: wait; }
+        .seccion { background: white; padding: 20px; margin: 20px 0; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .producto { background: var(--amarillo); margin: 10px 0; padding: 12px; border-radius: 6px; }
+        .pendiente { background: #c8e6c9; border-left: 5px solid var(--verde); }
+        .comprado { text-decoration: line-through; opacity: 0.6; background: #e0e0e0; }
+        input[type="text"], input[type="file"] { padding: 8px; margin: 5px 0; border: 1px solid var(--borde); border-radius: 4px; width: 100%; box-sizing: border-box; }
+        input:focus { outline: 2px solid var(--verde); border-color: transparent; }
+        #mensajes { min-height: 24px; margin-bottom: 10px; }
+        .msg { padding: 10px; border-radius: 6px; margin-bottom: 10px; font-weight: 500; }
+        .msg.success { background: #d4edda; color: #155724; }
+        .msg.error { background: #f8d7da; color: #721c24; }
+        .loader { display: inline-block; width: 14px; height: 14px; border: 2px solid #fff; border-bottom-color: transparent; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 6px; vertical-align: middle; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .acciones-lista { margin-top: 15px; display: flex; flex-wrap: wrap; gap: 5px; }
+        .item-lista { margin: 6px 0; padding: 10px; display: flex; justify-content: space-between; align-items: center; border-radius: 5px; }
+        .item-lista label { cursor: pointer; flex: 1; }
+        .hist-item { border-left: 4px solid var(--verde); margin: 10px 0; padding: 12px; background: #fafafa; border-radius: 0 6px 6px 0; }
+        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+    </style>
+</head>
+<body>
+    <h1>🍎 Eat-eat</h1>
+    <div id="mensajes" aria-live="polite"></div>
+
+    <!-- 📸 Sección de escaneo de tickets -->
+    <div class="seccion">
+        <h2>📸 Escanear ticket</h2>
+        <label for="foto" class="sr-only">Seleccionar imagen del ticket</label>
+       <input type="file" id="foto" accept="image/*" capture="environment" 
+       style="position:absolute; left:-9999px; top:-9999px;" aria-hidden="true">
+        <button id="btnEscanear" onclick="document.getElementById('foto').click()">📸 Escanear ticket</button>
+        <p id="estadoCarga" style="text-align:center; font-size:0.85rem; color:#666; min-height:1.2em; margin:5px 0;"></p>
+        <div id="resultado"></div>
+    </div>
+
+    <div class="seccion">
+        <button onclick="toggleHistorial()" id="btnHistorial">📜 Mostrar historial</button>
+        <div id="historialDiv" style="display:none; margin-top:10px;"></div>
+    </div>
+
+    <div class="seccion">
+        <h2>🛒 Lista de compra</h2>
+        <!-- ➕ Añadir producto manual -->
+        <div style="margin:10px 0; display:flex; gap:5px; flex-wrap:wrap;">
+            <input type="text" id="nuevoProducto" placeholder="Ej: Leche" style="flex:1; min-width:150px; padding:8px; border:1px solid #ccc; border-radius:4px;">
+            <input type="number" id="nuevaCantidad" value="1" min="1" style="width:70px; padding:8px; border:1px solid #ccc; border-radius:4px;">
+            <button onclick="anadirManual()" style="background:#007bff; padding:8px 12px;">➕ Añadir</button>
+        </div>
+        <div id="listaCompra"></div>
+        <div class="acciones-lista">
+            <button onclick="copiarPendientes()">📋 Copiar pendientes</button>
+            <button onclick="limpiarLista()">🗑️ Limpiar lista</button>
+        </div>
+    </div>
+
+    <!-- ☕ Sección de apoyo (opcional y discreta) -->
+    <div style="text-align: center; margin: 40px 0 20px 0; padding: 20px; background: #f8f9fa; border-radius: 12px; border: 1px solid #e0e0e0;">
+        <p style="margin: 0 0 8px 0; font-size: 0.95rem; color: #444; font-weight: 500;">
+            ¿Te resulta útil Eat-eat? 🍎
+        </p>
+        <p style="margin: 0 0 15px 0; font-size: 0.85rem; color: #666;">
+            El proyecto es libre y gratuito. Si quieres apoyar el desarrollo, es 100% opcional:
+        </p>
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <a href="https://ko-fi.com/farolibre" target="_blank" rel="noopener noreferrer"
+               style="background: #29abe0; color: white; padding: 10px 18px; text-decoration: none; border-radius: 8px; font-weight: 500; font-size: 0.9rem;">
+                ☕ Invítame un café
+            </a>
+            <a href="https://github.com/farolibre/Eat-eat" target="_blank" rel="noopener noreferrer"
+               style="background: #24292e; color: white; padding: 10px 18px; text-decoration: none; border-radius: 8px; font-weight: 500; font-size: 0.9rem;">
+                ⭐ Star en GitHub
+            </a>
+        </div>
+        <p style="margin: 12px 0 0 0; font-size: 0.75rem; color: #888;">
+            Sin registros • Sin pagos obligatorios • Código abierto
+        </p>
+    </div>
+
+<script>
+    // URL relativa: funciona en local (127.0.0.1) y en Render
+    const API_URL = ""; 
+    let productosPendientes = [];
+    let listaCompra = [];
+    const STORAGE_KEY = 'eat_eat_lista';
+
+    const escapeHtml = (str) => str ? String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])) : '';
+    
+    const mostrarMensaje = (tipo, texto) => {
+        const el = document.getElementById('mensajes');
+        if (!el) { alert(texto); return; }
+        el.innerHTML = `<div style="padding:10px; margin-bottom:10px; border-radius:6px; background:${tipo==='success'?'#d4edda':'#f8d7da'}; color:${tipo==='success'?'#155724':'#721c24'};">${texto}</div>`;
+        setTimeout(() => { el.innerHTML = ''; }, 4000);
+    };
+    
+    const guardarEstado = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(listaCompra));
+    const cargarEstado = () => {
+        const data = localStorage.getItem(STORAGE_KEY);
+        if (data) { try { listaCompra = JSON.parse(data); } catch(e) { listaCompra = []; } }
+    };
+
+    async function callApi(url, options = {}, btnId = null) {
+        if (btnId) document.getElementById(btnId).disabled = true;
+        // Timeout 60s para Render (plan gratuito)
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 60000);
+        try {
+            const res = await fetch(API_URL + url, { ...options, signal: controller.signal });
+            clearTimeout(timeoutId);
+            if (!res.ok) throw new Error(`Error ${res.status}`);
+            return await res.json();
+        } catch (err) {
+            clearTimeout(timeoutId);
+            console.error('API Error:', err);
+            if (err.name === 'AbortError') {
+                mostrarMensaje('error', '⏱️ Servidor ocupado. Espera ~30 seg e intenta de nuevo.');
+            } else {
+                mostrarMensaje('error', '❌ No se conecta con el servidor');
+            }
+            return null;
+        } finally {
+            if (btnId) document.getElementById(btnId).disabled = false;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => { cargarEstado(); renderizarLista(); });
+
+   async function escanear() {
+    const file = document.getElementById('foto').files[0];
+    if (!file) { mostrarMensaje('error', 'Selecciona una imagen'); return; }
+    
+    const btn = document.getElementById('btnEscanear');
+    const estado = document.getElementById('estadoCarga');
+    btn.disabled = true;
+    btn.style.opacity = '0.7';
+    estado.textContent = '⏳ Subiendo y procesando...';
+    
+    const fd = new FormData();
+    fd.append('file', file);
+    document.getElementById('resultado').innerHTML = '⏳ Procesando...';
+    
+    try {
+        const data = await callApi('/escanear', { method: 'POST', body: fd });
+        
+        // Resetear botón
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        estado.textContent = '';
+        
+        if (!data) { 
+            document.getElementById('resultado').innerHTML = ''; 
+            return; 
+        }
+        if (data.error) { 
+            document.getElementById('resultado').innerHTML = `<p style="color:red">❌ ${data.error}</p>`; 
+            return; 
+        }
+        if (Array.isArray(data.productos) && data.productos.length) {
+            productosPendientes = data.productos.map(p => ({ nombre: escapeHtml(p.nombre), cantidad: p.cantidad || 1 }));
+            mostrarCorreccion();
+            mostrarMensaje('success', `✅ ${productosPendientes.length} productos detectados`);
+        } else {
+            document.getElementById('resultado').innerHTML = '<p>⚠️ No se leyeron productos. Prueba con otra foto.</p>';
+        }
+    } catch (err) {
+        console.error('Error en escanear():', err);
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        estado.textContent = '';
+        document.getElementById('resultado').innerHTML = `<p style="color:red">❌ Error: ${err.message}</p>`;
+        mostrarMensaje('error', 'Error al procesar la imagen');
+    }
+}
+
+    function mostrarCorreccion() {
+        let html = '<h3>Revisa y corrige:</h3>';
+        productosPendientes.forEach((p, i) => {
+            html += `<div style="background:#fff3cd; padding:10px; margin:8px 0; border-radius:6px;">
+                        <div>🔍 ${escapeHtml(p.nombre)} (${p.cantidad} uds)</div>
+                        <input type="text" id="corr-${i}" value="${escapeHtml(p.nombre)}" style="width:100%; padding:6px; margin-top:4px;">
+                        <button onclick="guardarUno(${i})" style="margin-top:4px;">Guardar este</button>
+                     </div>`;
+        });
+        html += '<button onclick="guardarTodos()" style="margin-top:10px; width:100%;">✅ Guardar todos</button>';
+        document.getElementById('resultado').innerHTML = html;
+    }
+
+    async function guardarUno(idx) {
+        const nombre = document.getElementById(`corr-${idx}`).value.trim();
+        if (!nombre) return;
+        const prod = [{ nombre, cantidad: Number(productosPendientes[idx].cantidad) || 1 }];
+        const data = await callApi('/guardar', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(prod) });
+        if (data && data.ok) {
+            mostrarMensaje('success', 'Producto guardado');
+            productosPendientes.splice(idx, 1);
+            if (productosPendientes.length) mostrarCorreccion(); else document.getElementById('resultado').innerHTML = '';
+            if (document.getElementById('historialDiv').style.display === 'block') cargarHistorial();
+        }
+    }
+
+    async function guardarTodos() {
+        const guardar = [];
+        for (let i=0; i<productosPendientes.length; i++) {
+            const nombre = document.getElementById(`corr-${i}`).value.trim();
+            if (nombre) {
+                let cant = parseInt(productosPendientes[i].cantidad);
+                if (isNaN(cant) || cant < 1) cant = 1;
+                guardar.push({ nombre: nombre, cantidad: cant });
+            }
+        }
+        if (!guardar.length) { mostrarMensaje('error', 'Escribe al menos un nombre'); return; }
+        const data = await callApi('/guardar', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(guardar) });
+        if (data && data.ok) {
+            mostrarMensaje('success', `✅ ${guardar.length} productos guardados`);
+            productosPendientes = [];
+            document.getElementById('resultado').innerHTML = '';
+            if (document.getElementById('historialDiv').style.display === 'block') cargarHistorial();
+        }
+    }
+
+    async function cargarHistorial() {
+        const data = await callApi('/historial', {}, 'btnHistorial');
+        if (!data) return;
+        const cont = document.getElementById('historialDiv');
+        if (!data.length) { cont.innerHTML = "<p>Sin compras recientes</p>"; return; }
+        let html = "";
+        data.slice().reverse().forEach(compra => {
+            html += `<div style="border-left:4px solid green; margin:10px 0; padding:10px; background:#f9f9f9;">📅 ${escapeHtml(compra.fecha)}<br>`;
+            (compra.productos||[]).forEach(p => html += `<label><input type="checkbox" class="check-hist" data-nombre="${escapeHtml(p.nombre)}"> ${escapeHtml(p.nombre)}</label><br>`);
+            html += `</div>`;
+        });
+        html += `<button onclick="agregarSeleccionados()">➕ Añadir a lista</button>`;
+        cont.innerHTML = html;
+    }
+
+    function agregarSeleccionados() {
+        const cbs = document.querySelectorAll('.check-hist:checked');
+        const seleccionados = [...new Set([...cbs].map(cb => cb.dataset.nombre))];
+        let añadidos = 0;
+        seleccionados.forEach(n => {
+            if (!listaCompra.some(item => item.nombre === n)) { listaCompra.push({ nombre: n, comprado: false }); añadidos++; }
+        });
+        guardarEstado(); renderizarLista();
+        mostrarMensaje('success', añadidos ? `${añadidos} productos añadidos` : 'Ya estaban en la lista');
+    }
+
+    function renderizarLista() {
+        const cont = document.getElementById('listaCompra');
+        if (!listaCompra.length) { cont.innerHTML = "<p style='color:#666'>Lista vacía</p>"; return; }
+        let html = "";
+        listaCompra.forEach((item, i) => {
+            const clase = item.comprado ? "comprado" : "pendiente";
+            html += `<div class="${clase}" style="margin:6px 0; padding:10px; display:flex; justify-content:space-between; border-radius:6px;">
+                        <label style="cursor:pointer; flex:1;"><input type="checkbox" onchange="toggleComprado(${i})" ${item.comprado?'checked':''}> ${escapeHtml(item.nombre)}</label>
+                        <button onclick="eliminarDeLista(${i})">🗑️</button>
+                     </div>`;
+        });
+        cont.innerHTML = html;
+    }
+
+    function toggleComprado(i) { listaCompra[i].comprado = !listaCompra[i].comprado; guardarEstado(); renderizarLista(); }
+    function eliminarDeLista(i) { listaCompra.splice(i,1); guardarEstado(); renderizarLista(); mostrarMensaje('success','Eliminado'); }
+    function limpiarLista() { if(listaCompra.length && confirm('¿Vaciar lista?')) { listaCompra=[]; guardarEstado(); renderizarLista(); mostrarMensaje('success','Lista limpia'); } }
+    async function copiarPendientes() {
+        const pendientes = listaCompra.filter(i=>!i.comprado).map(i=>i.nombre);
+        if(!pendientes.length) { mostrarMensaje('error','No hay pendientes'); return; }
+        try { await navigator.clipboard.writeText(pendientes.join('\n')); mostrarMensaje('success','Copiado'); }
+        catch { mostrarMensaje('error','No se pudo copiar'); }
+    }
+    function toggleHistorial() {
+        const div = document.getElementById('historialDiv');
+        const btn = document.getElementById('btnHistorial');
+        if (div.style.display === 'none') { div.style.display='block'; btn.textContent='📜 Ocultar historial'; cargarHistorial(); }
+        else { div.style.display='none'; btn.textContent='📜 Mostrar historial'; }
+    }
+       function anadirManual() {
+        const nombre = document.getElementById('nuevoProducto').value.trim();
+        const cantidad = parseInt(document.getElementById('nuevaCantidad').value) || 1;
+        if (!nombre) { mostrarMensaje('error', 'Escribe un nombre de producto'); return; }
+        if (!listaCompra.some(p => p.nombre.toLowerCase() === nombre.toLowerCase())) {
+            listaCompra.push({ nombre: nombre, cantidad: cantidad, comprado: false });
+            guardarEstado();
+            renderizarLista();
+            mostrarMensaje('success', '✅ Producto añadido a la lista');
+            document.getElementById('nuevoProducto').value = '';
+            document.getElementById('nuevaCantidad').value = '1';
+        } else {
+            mostrarMensaje('error', '⚠️ Este producto ya está en la lista');
+        }
+    }
+</script>  <!-- 👈 CIERRE DEL PRIMER SCRIPT (ESTO FALTABA) -->
+
+<!-- Segundo script: Compresión segura para móvil -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var inputFoto = document.getElementById('foto');
+    var btn = document.getElementById('btnEscanear');
+    
+    if (!inputFoto || !btn) return;
+
+    inputFoto.addEventListener('change', function() {
+        var file = this.files[0];
+        if (!file) return;
+
+        // Si ya es ligera (<500KB), escanear normal
+        if (file.size < 500000) {
+            console.log("📤 Foto ligera, escaneando directo...");
+            escanear();
+            return;
+        }
+
+        console.log("🏎️ Comprimiendo imagen...");
+        btn.disabled = true;
+        btn.textContent = "⏳ Optimizando foto...";
+
+        var img = new Image();
+       img.onload = function() {
+    // 🔍 Compresión adaptativa: suave para fotos ligeras, agresiva para pesadas (>2MB)
+    var isLarge = file.size > 2000000;
+    var max = isLarge ? 800 : 1200;
+    var quality = isLarge ? 0.6 : 0.7;
+    
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+    
+    // Redimensionar manteniendo proporción
+    var w = img.width, h = img.height;
+    if (w > h) { if (w > max) { h = h * max / w; w = max; } }
+    else       { if (h > max) { w = w * max / h; h = max; } }
+    
+    canvas.width = w;
+    canvas.height = h;
+    ctx.drawImage(img, 0, 0, w, h);
+    
+    canvas.toBlob(function(blob) {
+        if (!blob) {
+            console.warn("⚠️ Compresión fallida, usando original");
+            btn.disabled = false;
+            btn.textContent = "📸 Escanear ticket";
+            escanear();
+            return;
+        }
+        
+        // Crear archivo comprimido
+        var compressed = new File([blob], "ticket_opt.jpg", { type: "image/jpeg" });
+        console.log("✅ Compresión " + (isLarge ? "agresiva" : "suave") + ": " + (compressed.size / 1024).toFixed(1) + "KB");
+        
+        // Reemplazar archivo en el input
+        var dt = new DataTransfer();
+        dt.items.add(compressed);
+        inputFoto.files = dt.files;
+        
+        // Restaurar botón y lanzar escaneo
+        btn.disabled = false;
+        btn.textContent = "📸 Escanear ticket";
+        escanear();
+    }, 'image/jpeg', quality);
+    
+    URL.revokeObjectURL(img.src); // Liberar memoria
+};
+
+img.onerror = function() {
+    console.warn("⚠️ Error al cargar imagen, usando original");
+    btn.disabled = false;
+    btn.textContent = "📸 Escanear ticket";
+    escanear();
+};
+
+img.src = URL.createObjectURL(file);
+    });
+});
+</script>
+</body>
+</html>

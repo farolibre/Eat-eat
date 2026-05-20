@@ -1,0 +1,232 @@
+[
+  {
+    "fecha": "2026-05-19 11:10:17",
+    "productos": [
+      {
+        "nombre": "TEA",
+        "cantidad": "13",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "IFA",
+        "cantidad": "0",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "COTON BLCO",
+        "cantidad": "0",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "VRDE Ol",
+        "cantidad": "2506",
+        "ubicacion": "despensa"
+      }
+    ]
+  },
+  {
+    "fecha": "2026-05-19 11:10:32",
+    "productos": [
+      {
+        "nombre": "ABx",
+        "cantidad": "60",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "CEBOL KG",
+        "cantidad": "6",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "a FA",
+        "cantidad": "13",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "ESPBCOIFA",
+        "cantidad": "13",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "MELOCOTON BLCO",
+        "cantidad": "18",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "ESPARR VRDE LU",
+        "cantidad": "290",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "ANO",
+        "cantidad": "12",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "AQF",
+        "cantidad": "0",
+        "ubicacion": "despensa"
+      }
+    ]
+  },
+  {
+    "fecha": "2026-05-19 11:34:22",
+    "productos": [
+      {
+        "nombre": "ABx",
+        "cantidad": "60",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "CEBOL KG",
+        "cantidad": "6",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "a FA",
+        "cantidad": "13",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "ESPBCOIFA",
+        "cantidad": "13",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "MELOCOTON BLCO",
+        "cantidad": "18",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "ESPARR VRDE LU",
+        "cantidad": "290",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "ANO",
+        "cantidad": "12",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "AQF",
+        "cantidad": "0",
+        "ubicacion": "despensa"
+      }
+    ]
+  },
+  {
+    "fecha": "2026-05-19 11:34:35",
+    "productos": [
+      {
+        "nombre": "TEA",
+        "cantidad": "13",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "IFA",
+        "cantidad": "0",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "COTON BLCO",
+        "cantidad": "0",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "VRDE Ol",
+        "cantidad": "2506",
+        "ubicacion": "despensa"
+      }
+    ]
+  },
+  {
+    "fecha": "2026-05-19 11:52:03",
+    "productos": [
+      {
+        "nombre": "ABx",
+        "cantidad": "60",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "CEBOL KG",
+        "cantidad": "6",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "a FA",
+        "cantidad": "13",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "ESPBCOIFA",
+        "cantidad": "13",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "MELOCOTON BLCO",
+        "cantidad": "18",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "ESPARR VRDE LU",
+        "cantidad": "290",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "ANO",
+        "cantidad": "12",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "AQF",
+        "cantidad": "0",
+        "ubicacion": "despensa"
+      }
+    ]
+  },
+  {
+    "fecha": "2026-05-19 11:52:27",
+    "productos": [
+      {
+        "nombre": "ABx",
+        "cantidad": "60",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "CEBOL KG",
+        "cantidad": "6",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "a FA",
+        "cantidad": "13",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "ESPBCOIFA",
+        "cantidad": "13",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "MELOCOTON BLCO",
+        "cantidad": "18",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "ESPARR VRDE LU",
+        "cantidad": "290",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "ANO",
+        "cantidad": "12",
+        "ubicacion": "despensa"
+      },
+      {
+        "nombre": "AQF",
+        "cantidad": "0",
+        "ubicacion": "despensa"
+      }
+    ]
+  }
+]

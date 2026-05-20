@@ -1,0 +1,124 @@
+[
+  {
+    "id": 5,
+    "nombre": "IFA",
+    "cantidad": 0.0,
+    "ubicacion": "despensa"
+  },
+  {
+    "id": 6,
+    "nombre": "leche",
+    "cantidad": 2.0,
+    "ubicacion": "nevera"
+  },
+  {
+    "id": 7,
+    "nombre": "IFA",
+    "cantidad": 0.0,
+    "ubicacion": "nevera"
+  },
+  {
+    "id": 8,
+    "nombre": "TEA",
+    "cantidad": 13.0,
+    "ubicacion": "despensa"
+  },
+  {
+    "id": 9,
+    "nombre": "TEA",
+    "cantidad": 12.0,
+    "ubicacion": "despensa"
+  },
+  {
+    "id": 10,
+    "nombre": "IFA",
+    "cantidad": 0,
+    "ubicacion": "despensa"
+  },
+  {
+    "id": 12,
+    "nombre": "VRDE Ol",
+    "cantidad": 2506.0,
+    "ubicacion": "despensa"
+  },
+  {
+    "id": 14,
+    "nombre": "pipas facundo",
+    "cantidad": 3.0,
+    "ubicacion": "despensa"
+  },
+  {
+    "id": 16,
+    "nombre": "melon",
+    "cantidad": 2.0,
+    "ubicacion": "despensa",
+    "veces_consumido": 1
+  },
+  {
+    "id": 17,
+    "nombre": "coton blanco",
+    "cantidad": 0,
+    "ubicacion": "despensa",
+    "veces_consumido": 1
+  },
+  {
+    "id": 18,
+    "nombre": "ABx",
+    "cantidad": 60.0,
+    "ubicacion": "nevera"
+  },
+  {
+    "id": 19,
+    "nombre": "CEBOL KG",
+    "cantidad": 6.0,
+    "ubicacion": "nevera"
+  },
+  {
+    "id": 20,
+    "nombre": "a FA",
+    "cantidad": 13.0,
+    "ubicacion": "despensa"
+  },
+  {
+    "id": 21,
+    "nombre": "ESPBCOIFA",
+    "cantidad": 13.0,
+    "ubicacion": "despensa"
+  },
+  {
+    "id": 22,
+    "nombre": "MELOCOTON BLCO",
+    "cantidad": 18.0,
+    "ubicacion": "despensa"
+  },
+  {
+    "id": 23,
+    "nombre": "ESPARR VRDE LU",
+    "cantidad": 290.0,
+    "ubicacion": "despensa"
+  },
+  {
+    "id": 24,
+    "nombre": "ANO",
+    "cantidad": 12.0,
+    "ubicacion": "despensa"
+  },
+  {
+    "id": 25,
+    "nombre": "AQF",
+    "cantidad": 0.0,
+    "ubicacion": "despensa"
+  },
+  {
+    "id": 26,
+    "nombre": "escofia",
+    "cantidad": 13.0,
+    "ubicacion": "despensa"
+  },
+  {
+    "id": 27,
+    "nombre": "ESPARR VRDE LU",
+    "cantidad": 290.0,
+    "ubicacion": "despensa"
+  }
+]
